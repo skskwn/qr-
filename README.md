@@ -12,3 +12,6 @@ This is a function to get the authentication number through firebase and log in 
 
 💻
 I'm not good enough, but I'll develop it little by little.
+
+
+💡 If a problem occurs, please leave it as an issue at any time.
