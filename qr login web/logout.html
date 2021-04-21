@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>qr login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                  aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">qr login</a>
+          </div>
+
+
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li class="active">
+                      <a href="/">Home</a>
+                  </li>
+
+                  <li>
+                      <a id="joinmenu" href="/join.html">가입</a>
+                  </li>
+                  <li>
+                      <a id="loginmenu" href="/login.html">로그인</a>
+                  </li>
+
+              </ul>
+          </div>
+
+      </div>
+
+  </nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+<div class="container">
+        <h1>please wait..</h1>
+
+    </div>
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+  <script>
+    var firebaseEmailAuth;
+
+
+    var firebaseConfig = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
+  };
+
+    firebase.initializeApp(firebaseConfig);
+
+    firebaseEmailAuth = firebase.auth();
+
+        firebaseEmailAuth.signOut().then(function() {
+
+                 window.location.href = "/index.html"
+
+        }).catch(function(error) {
+        if(error){
+                alert("로그인 실패");
+        }
+});
+
+    </script>
+</body>
+</html>

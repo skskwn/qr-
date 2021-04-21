@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title id="titleCheck">qr login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimun-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="/JsQRScanner/jsPretty/jsqrscanner.nocache.js"></script>
+  <link type="text/css" rel="stylesheet" href="JsQRScanner.css">
+  <style type="text/css">
+
+
+
+
+        #a {font-weight: 900;}
+
+
+        h1{text-align:center;}
+          p{text-align:center}
+
+
+        .jumbotron{
+          background-image: url('1.jpg');
+
+          background-repeat : no-repeat;
+		      background-size : cover;
+          background-position: center center;
+
+
+
+
+
+        }
+  </style>
+
+</head>
+
+<body>
+
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                  aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+
+
+
+
+
+              <a class="navbar-brand" href="index.html">qr code login</a>
+          </div>
+
+
+
+
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li class="active">
+                  </li>
+
+                  <li>
+                      <a id="loginmenu" href="/logout.html">로그아웃</a>
+                  </li>
+
+              </ul>
+
+          </div>
+
+      </div>
+
+
+  </nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">qr코드 인증</div>
+      <div class="container">
+      <div style="padding:5px;">
+
+
+
+
+
+        <div class="container">
+
+        <noscript>
+          <div class="row-element-set error_message">
+            Your web browser must have JavaScript enabled
+            in order for this application to display correctly.
+          </div>
+        </noscript>
+        <div class="row-element-set error_message" id="secure-connection-message" style="display: none;" hidden >
+          You may need to serve this page over a secure connection (https) to run JsQRScanner correctly.
+        </div>
+        <script>
+        if (location.protocol != 'https:') {
+          document.getElementById('secure-connection-message').style='display: block';
+          }
+          </script>
+          <div class="container">
+          <h3 align= "center">QR Code 인증 로그인</h3>
+            <div class="FlexPanel detailsPanel QRScannerShort">
+              <div class="FlexPanel shortInfoPanel">
+                <div class="gwt-HTML">
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="container">
+            <div class="qrscanner" id="scanner">
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div style="padding:5px;">
+      </div>
+      </div>
+      </div>
+      </div>
+
+
+
+
+
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+  <script>
+
+
+
+    var firebaseEmailAuth;
+    var firebaseDatabase;
+
+
+
+    var name;
+    var loginUserKey;
+    var userInfo;
+    var comment;
+
+
+    //파이어 베이스 초기화 코드
+    var firebaseConfig = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
+  };
+
+    firebase.initializeApp(firebaseConfig);
+
+    firebaseEmailAuth = firebase.auth();
+
+    firebaseDatabase = firebase.database();
+
+
+
+
+    function drawBasic() {
+
+
+
+              }
+
+
+    userSessionCheck();
+
+    function thanksList() {
+
+
+
+      if(loginUserKey){
+
+
+          firebaseEmailAuth.onAuthStateChanged(function (user) {
+
+            if (user) {
+
+
+
+
+              firebaseDatabase.ref("users/" + user.uid).once('value').then(function (snapshot) {
+
+
+                document.getElementById("loginmenu").textContent = "로그아웃";
+                document.getElementById("loginmenu").href = "/logout.html";
+                document.getElementById("joinmenu").textContent = "반가워요! " + snapshot.val().name + " 님";
+                document.getElementById("joinmenu").href = "#";
+
+
+
+                name = snapshot.val().name;
+                loginUserKey = snapshot.key;
+                userInfo = snapshot.val();
+
+
+
+
+
+
+
+
+              });
+
+
+
+
+
+            }
+           else {
+
+
+            }
+          });
+
+      }else{
+
+
+      }
+
+    }
+
+
+
+
+
+
+
+    function onQRCodeScanned(scannedText)
+    {
+
+      firebaseEmailAuth.onAuthStateChanged(function (user) {
+
+        if (user) {
+          firebaseDatabase.ref("users/" + user.uid).once('value').then(function (snapshot) {
+          var qrcode = firebase.database().ref("qr인증/" + snapshot.val().name + "/qrcode");
+          var qrcertification = firebase.database().ref('qr인증/' + snapshot.val().name + "/qr인증");
+          qrcode.on('value', function(snapshot4) {
+            var qrcode1 = snapshot4.val()
+            if(qrcode1 == scannedText)
+
+            {
+              qrcertification.on('value', function(snapshot5) {
+                qrcertification.set(1);
+                alert('인증이 완료되었습니다!');
+
+              });
+
+
+
+
+
+            } else {
+
+              alert('올바른 QR code로 인증해 주세요.');
+            }
+
+
+
+
+    });
+    });
+  }
+  });
+
+    }
+
+
+
+    function provideVideo()
+    {
+    var n = navigator;
+
+    if (n.mediaDevices && n.mediaDevices.getUserMedia)
+    {
+      return n.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment"
+        },
+        audio: false
+      });
+    }
+
+    return Promise.reject('Your browser does not support getUserMedia');
+    }
+
+    function provideVideoQQ()
+    {
+    return navigator.mediaDevices.enumerateDevices()
+    .then(function(devices) {
+        var exCameras = [];
+        devices.forEach(function(device) {
+        if (device.kind === 'videoinput') {
+          exCameras.push(device.deviceId)
+        }
+     });
+
+        return Promise.resolve(exCameras);
+    }).then(function(ids){
+        if(ids.length === 0)
+        {
+          return Promise.reject('Could not find a webcam');
+        }
+
+        return navigator.mediaDevices.getUserMedia({
+            video: {
+              'optional': [{
+                'sourceId': ids.length === 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
+                }]
+            }
+        });
+    });
+    }
+
+    //this function will be called when JsQRScanner is ready to use
+    function JsQRScannerReady()
+    {
+    //create a new scanner passing to it a callback function that will be invoked when
+    //the scanner succesfully scan a QR code
+    var jbScanner = new JsQRScanner(onQRCodeScanned);
+    //var jbScanner = new JsQRScanner(onQRCodeScanned, provideVideo);
+    //reduce the size of analyzed image to increase performance on mobile devices
+    jbScanner.setSnapImageMaxSize(300);
+    var scannerParentElement = document.getElementById("scanner");
+    if(scannerParentElement)
+    {
+      //append the jbScanner to an existing DOM element
+    jbScanner.appendTo(scannerParentElement);
+    }
+    }
+
+
+
+
+
+
+
+
+  </script>
+
+
+
+</body>
+
+</html>
