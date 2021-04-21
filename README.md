@@ -1,8 +1,8 @@
 # 📱 qr code login
 This is a function to get the authentication number through firebase and log in with qr code.
 
--https://github.com/jbialobr/JsQRScanner
--https://pypi.org/project/qrcode/
+- https://github.com/jbialobr/JsQRScanner
+- https://pypi.org/project/qrcode/
 
 
 ✨
