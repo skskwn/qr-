@@ -19,7 +19,7 @@
    <enum>Qt::DefaultContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>MSU-A</string>
+   <string>QR code 인증</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
